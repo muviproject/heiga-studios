@@ -102,48 +102,51 @@ function fmtDate(d){
 }
 
 /* ---------- shared chrome ---------- */
-const HEAD_EXTRA = `
-<link rel="icon" type="image/png" href="/assets/img/logo.png">
-<link rel="stylesheet" href="/assets/css/fonts.css">
-<link rel="stylesheet" href="/assets/css/style.css">
-<script src="/assets/js/vendor/lenis.min.js" defer></script>
-<script src="/assets/js/main.js" defer></script>`;
-const HEADER = `
+/* Relative prefix so the site works at any base path (GitHub Pages subpath,
+   localhost, or a root domain). Depth: 0 = home, 1 = sections, 2 = posts/cases. */
+const RP = d => d === 0 ? './' : '../'.repeat(d);
+const headExtra = d => { const rp = RP(d); return `
+<link rel="icon" type="image/png" href="${rp}assets/img/logo.png">
+<link rel="stylesheet" href="${rp}assets/css/fonts.css">
+<link rel="stylesheet" href="${rp}assets/css/style.css">
+<script src="${rp}assets/js/vendor/lenis.min.js" defer></script>
+<script src="${rp}assets/js/main.js" defer></script>`; };
+const header = d => { const rp = RP(d); return `
 <header class="site-header">
-  <a class="brand" href="/" aria-label="Heiga Studios — home">HEIGA</a>
+  <a class="brand" href="${rp}" aria-label="Heiga Studios — home">HEIGA</a>
   <button class="menu-btn" data-menu-open aria-label="Open menu">MENU</button>
 </header>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" aria-label="Site menu">
   <button class="drawer-close" data-menu-close>CLOSE</button>
   <nav>
-    <a class="drawer-link" href="/"><span class="roll"><span>HOME</span><span>HOME</span></span></a>
-    <a class="drawer-link" href="/about/"><span class="roll"><span>ABOUT</span><span>ABOUT</span></span></a>
-    <a class="drawer-link" href="/services/"><span class="roll"><span>SERVICES</span><span>SERVICES</span></span></a>
-    <a class="drawer-link" href="/studio/"><span class="roll"><span>STUDIO</span><span>STUDIO</span></span></a>
-    <a class="drawer-link" href="/work/"><span class="roll"><span>WORK</span><span>WORK</span></span></a>
-    <a class="drawer-link" href="/blog/"><span class="roll"><span>BLOG</span><span>BLOG</span></span></a>
-    <a class="drawer-link" href="/contact/"><span class="roll"><span>CONTACT</span><span>CONTACT</span></span></a>
+    <a class="drawer-link" href="${rp}"><span class="roll"><span>HOME</span><span>HOME</span></span></a>
+    <a class="drawer-link" href="${rp}about/"><span class="roll"><span>ABOUT</span><span>ABOUT</span></span></a>
+    <a class="drawer-link" href="${rp}services/"><span class="roll"><span>SERVICES</span><span>SERVICES</span></span></a>
+    <a class="drawer-link" href="${rp}studio/"><span class="roll"><span>STUDIO</span><span>STUDIO</span></span></a>
+    <a class="drawer-link" href="${rp}work/"><span class="roll"><span>WORK</span><span>WORK</span></span></a>
+    <a class="drawer-link" href="${rp}blog/"><span class="roll"><span>BLOG</span><span>BLOG</span></span></a>
+    <a class="drawer-link" href="${rp}contact/"><span class="roll"><span>CONTACT</span><span>CONTACT</span></span></a>
   </nav>
   <div class="social"><a href="https://www.instagram.com/HEIGASTUDIOS" target="_blank" rel="noopener">@HEIGASTUDIOS</a></div>
-</aside>`;
-const FOOTER = `
+</aside>`; };
+const footer = d => { const rp = RP(d); return `
   <footer>
     <div class="foot-pin" aria-hidden="true"><div class="wordmark">HEIGA</div></div>
     <div class="foot-body">
-      <div class="foot-brand"><img src="/assets/img/logo.png" alt="Heiga Studios logo" width="220" height="220" loading="lazy"></div>
+      <div class="foot-brand"><img src="${rp}assets/img/logo.png" alt="Heiga Studios logo" width="220" height="220" loading="lazy"></div>
       <div class="foot-grid">
         <div><h4>CONTACT</h4><address>168 SE 1st St #500, Miami,<br>FL 33131, USA.<br>
         <a href="mailto:info@heigastudios.com">info@heigastudios.com</a><br>
         <a href="tel:+17862121591">(786) 212-1591</a></address></div>
         <nav aria-label="Footer"><h4>MENU</h4>
-          <div class="foot-nav"><a href="/about/">About</a><a href="/services/">Services</a><a href="/studio/">Studio</a><a href="/work/">Work</a><a href="/blog/">Blog</a><a href="/contact/">Contact</a></div>
+          <div class="foot-nav"><a href="${rp}about/">About</a><a href="${rp}services/">Services</a><a href="${rp}studio/">Studio</a><a href="${rp}work/">Work</a><a href="${rp}blog/">Blog</a><a href="${rp}contact/">Contact</a></div>
         </nav>
         <div><h4>SOCIAL</h4><div class="foot-nav"><a href="https://www.instagram.com/HEIGASTUDIOS" target="_blank" rel="noopener">@HEIGASTUDIOS</a></div></div>
       </div>
       <div class="foot-bottom"><span>© 2026 HEIGA STUDIOS</span><span>SITE BY MUVIPROJECT</span></div>
     </div>
-  </footer>`;
+  </footer>`; };
 
 /* ---------- load posts ---------- */
 if (!fs.existsSync(CONTENT)) { console.error('No content dir'); process.exit(1); }
@@ -156,10 +159,11 @@ posts.forEach(p => {
 });
 console.log(`Posts: ${posts.length}`);
 
-/* ---------- blog index ---------- */
+/* ---------- blog index (depth 1) ---------- */
+const RP1 = RP(1);
 const rows = posts.map(p => `
-        <a class="blog-row reveal in" href="/blog/${p.slug}/" data-search="${(p.title+' '+p.excerpt+' '+p.tags.join(' ')).replace(/"/g,'&quot;')}">
-          <img src="${p.cover}" alt="${p.cover_alt.replace(/"/g,'&quot;')}" width="560" height="350" loading="lazy">
+        <a class="blog-row reveal in" href="${RP1}blog/${p.slug}/" data-search="${(p.title+' '+p.excerpt+' '+p.tags.join(' ')).replace(/"/g,'&quot;')}">
+          <img src="${RP1}${p.cover.slice(1)}" alt="${p.cover_alt.replace(/"/g,'&quot;')}" width="560" height="350" loading="lazy">
           <div>
             <p class="meta">${fmtDate(p.date)} · ${p.tags.join(' · ').toUpperCase() || 'NEWS'}</p>
             <h2>${p.title}</h2>
@@ -182,14 +186,14 @@ const blogIndex = `<!DOCTYPE html>
 <meta property="og:description" content="News, session stories and press from Heiga Studios Miami.">
 <meta property="og:url" content="${BASE}/blog/">
 <meta property="og:image" content="${BASE}/assets/img/f-01-hero.jpg">
-<meta name="twitter:card" content="summary_large_image">${HEAD_EXTRA}
+<meta name="twitter:card" content="summary_large_image">${headExtra(1)}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
 {"@type":"ListItem","position":1,"name":"Home","item":"${BASE}/"},
 {"@type":"ListItem","position":2,"name":"Blog","item":"${BASE}/blog/"}]}
 </script>
 </head>
-<body>${HEADER}
+<body>${header(1)}
 <main>
   <section class="page-hero">
     <p class="eyebrow">NEWS &amp; STORIES</p>
@@ -202,14 +206,15 @@ const blogIndex = `<!DOCTYPE html>
 ${rows}
       </div>
     </div>
-  </section>${FOOTER}
+  </section>${footer(1)}
 </main>
 </body>
 </html>`;
 fs.writeFileSync(path.join(SITE, 'blog/index.html'), blogIndex);
 console.log('blog/index.html written');
 
-/* ---------- post pages ---------- */
+/* ---------- post pages (depth 2) ---------- */
+const RP2 = RP(2);
 posts.forEach(p => {
   const dir = path.join(SITE, 'blog', p.slug);
   fs.mkdirSync(dir, { recursive: true });
@@ -231,7 +236,7 @@ posts.forEach(p => {
 <meta property="og:image" content="${BASE}${p.og_image}">
 <meta property="article:published_time" content="${p.date}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${BASE}${p.og_image}">${HEAD_EXTRA}
+<meta name="twitter:image" content="${BASE}${p.og_image}">${headExtra(2)}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BlogPosting",
 "headline":"${p.title.replace(/"/g,'\\"')}",
@@ -246,19 +251,19 @@ posts.forEach(p => {
 {"@type":"ListItem","position":3,"name":"${p.title.replace(/"/g,'\\"')}","item":"${url}"}]}
 </script>
 </head>
-<body>${HEADER}
+<body>${header(2)}
 <main>
-  <a class="back-link" href="/blog/">← ALL POSTS</a>
+  <a class="back-link" href="${RP2}blog/">← ALL POSTS</a>
   <article>
     <div class="post-body" style="padding-bottom:0">
       <p class="meta">${fmtDate(p.date)} · BY ${p.author.toUpperCase()}${p.tags.length ? ' · ' + p.tags.join(' · ').toUpperCase() : ''}</p>
       <h1>${p.title}</h1>
     </div>
-    <figure class="post-hero"><img src="${p.cover}" alt="${p.cover_alt.replace(/"/g,'&quot;')}" width="1920" height="1080"></figure>
+    <figure class="post-hero"><img src="${RP2}${p.cover.slice(1)}" alt="${p.cover_alt.replace(/"/g,'&quot;')}" width="1920" height="1080"></figure>
     <div class="post-body">
 ${md(p.body)}
     </div>
-  </article>${FOOTER}
+  </article>${footer(2)}
 </main>
 </body>
 </html>`;
@@ -269,9 +274,11 @@ ${md(p.body)}
 /* ---------- home LATEST section ---------- */
 const homePath = path.join(SITE, 'index.html');
 let home = fs.readFileSync(homePath, 'utf8');
+/* ---------- home LATEST section (depth 0) ---------- */
+const RP0 = RP(0);
 const cards = posts.slice(0, 3).map(p => `
-        <a class="post-card reveal" href="/blog/${p.slug}/">
-          <img src="${p.cover}" alt="${p.cover_alt.replace(/"/g,'&quot;')}" loading="lazy">
+        <a class="post-card reveal" href="${RP0}blog/${p.slug}/">
+          <img src="${RP0}${p.cover.slice(1)}" alt="${p.cover_alt.replace(/"/g,'&quot;')}" loading="lazy">
           <p class="meta">${fmtDate(p.date)}</p>
           <h3>${p.title}</h3>
           <p>${p.excerpt}</p>
