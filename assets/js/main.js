@@ -131,6 +131,7 @@
   var stripWrap = document.querySelector('.gallery');
   var sats = Array.prototype.slice.call(document.querySelectorAll('.sat'));
   var heroBg = document.querySelector('.hero-bg');
+  var heroSec = document.querySelector('.hero');
 
   /* manifesto: split words (keeping .accent), fade in place tied to scroll */
   var wordsP = document.querySelector('[data-words] p');
@@ -176,11 +177,12 @@
       var gp = transit(stripWrap);
       strip.style.transform = 'translateX(' + (-150 + 150*gp).toFixed(1) + 'px)';
     }
-    if (heroBg){
-      /* el fondo fijo del hero se atenúa al salir, para no asomar en secciones posteriores */
+    if (heroBg && heroSec){
+      /* el fondo queda fijo a opacidad plena mientras el hero está en viewport
+         (la sección siguiente se desliza cubriéndolo); se oculta al salir para
+         no asomar en zonas transparentes posteriores (ej. foot-pin) */
       var y = window.scrollY || window.pageYOffset || 0;
-      var vh2 = window.innerHeight || 1;
-      heroBg.style.opacity = clamp(1 - y / (vh2 * 0.85), 0, 1).toFixed(3);
+      heroBg.style.visibility = y < heroSec.offsetHeight ? 'visible' : 'hidden';
     }
     if (sats.length){
       var vh = window.innerHeight;
