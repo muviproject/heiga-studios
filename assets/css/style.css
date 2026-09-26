@@ -8,7 +8,7 @@
   --ink:#ffffff;
   --muted:#a8a8a8;
   --dim:#6f6f6f;
-  --accent:#ef4323; /* provisorio — confirmar color de marca con Malury */
+  --accent:#5eb9ff; /* celeste — definido por Daniel 2026-09-26 */
   --hair:#8c8c8c;
   --light:#f4f1ec;
   --font-display:'League Gothic', 'Arial Narrow', sans-serif;
@@ -78,7 +78,9 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0}
+/* Fondo fijo: la imagen queda clavada mientras el contenido hace scroll por encima
+   (medido en AK.REC: hero con fondo fijo, la sección siguiente se desliza cubriéndola) */
+.hero-bg{position:fixed;inset:0;z-index:0}
 .hero-bg img{width:100%;height:100%;object-fit:cover}
 .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.55))}
 .hero-inner{position:relative;z-index:1}
@@ -116,9 +118,9 @@ main>section.hero{background:transparent}
 .tilt-card{
   background:var(--bg-2);border-radius:28px;
   max-width:1200px;margin:0 auto;padding:clamp(48px,8vw,120px);
-  will-change:transform;
-  transform:rotate(-43deg);
 }
+/* las palabras aparecen en su lugar con fade ligado al scroll (sin rotación) */
+.tilt-card .w{will-change:opacity}
 .tilt-card p{
   font-family:var(--font-display);text-transform:uppercase;
   font-size:clamp(40px,6vw,104px);line-height:.95;

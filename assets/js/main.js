@@ -1,7 +1,8 @@
 /* HEIGA Studios — motion system
    Measured values from Web Reference Lab #1 (AK.REC):
    hero 600ms/letter, stagger 85ms, blur(10px)->0, ease-out strong;
-   card -43deg->0deg linear; waveform zoom 1.2->1.0 linear;
+   manifesto words: scroll-linked fade-in-place (no rotation);
+   waveform zoom 1.2->1.0 linear;
    vinyls ~56deg/s (6.4s/rev) viewport-gated; drawer instant swap;
    footer wordmark pinned ~750px; gallery drift -150px->0. */
 (function(){
@@ -126,10 +127,33 @@
   /* ---------- scroll-linked effects (single rAF) ---------- */
   var waveFig = document.querySelector('[data-wave] img');
   var waveWrap = document.querySelector('[data-wave]');
-  var card = document.querySelector('[data-tilt]');
   var strip = document.querySelector('[data-drift]');
   var stripWrap = document.querySelector('.gallery');
   var sats = Array.prototype.slice.call(document.querySelectorAll('.sat'));
+  var heroBg = document.querySelector('.hero-bg');
+
+  /* manifesto: split words (keeping .accent), fade in place tied to scroll */
+  var wordsP = document.querySelector('[data-words] p');
+  var words = [];
+  if (wordsP){
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var srcNodes = Array.prototype.slice.call(wordsP.childNodes);
+    wordsP.textContent = '';
+    srcNodes.forEach(function(n){
+      var isAccent = n.nodeType === 1 && n.classList.contains('accent');
+      n.textContent.split(/(\s+)/).forEach(function(tok){
+        if (!tok) return;
+        if (/^\s+$/.test(tok)){ wordsP.appendChild(document.createTextNode(' ')); return; }
+        var s = document.createElement('span');
+        s.className = 'w' + (isAccent ? ' accent' : '');
+        s.textContent = tok;
+        s.style.opacity = reduceMotion ? '1' : '0';
+        wordsP.appendChild(s);
+        words.push(s);
+      });
+    });
+    if (reduceMotion) words = [];
+  }
 
   var ticking = false;
   function update(){
@@ -139,16 +163,24 @@
       var s = 1.2 - 0.2*p;
       waveFig.style.transform = 'scale(' + s.toFixed(4) + ')';
     }
-    if (card){
-      var cp = transit(card.parentElement || card);
-      var rot = -43 + 43*cp;
-      var sc = 0.88 + 0.12*cp;
-      card.style.transform = 'rotate(' + rot.toFixed(3) + 'deg) scale(' + sc.toFixed(4) + ')';
-      card.style.borderRadius = (28*(1-cp)).toFixed(1) + 'px';
+    if (words.length && wordsP){
+      /* cada palabra aparece con fade en su lugar a medida que la tarjeta cruza el viewport */
+      var wp = transit(wordsP);
+      var wn = words.length;
+      words.forEach(function(w, i){
+        var start = (i / wn) * 0.55;
+        w.style.opacity = clamp((wp - start) / 0.45, 0, 1).toFixed(3);
+      });
     }
     if (strip && stripWrap){
       var gp = transit(stripWrap);
       strip.style.transform = 'translateX(' + (-150 + 150*gp).toFixed(1) + 'px)';
+    }
+    if (heroBg){
+      /* el fondo fijo del hero se atenúa al salir, para no asomar en secciones posteriores */
+      var y = window.scrollY || window.pageYOffset || 0;
+      var vh2 = window.innerHeight || 1;
+      heroBg.style.opacity = clamp(1 - y / (vh2 * 0.85), 0, 1).toFixed(3);
     }
     if (sats.length){
       var vh = window.innerHeight;
