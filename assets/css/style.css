@@ -215,15 +215,13 @@ main>section.hero{background:transparent}
   font-family:var(--font-display);text-transform:uppercase;
   font-size:clamp(64px,11vw,190px);line-height:.9;margin:0 0 48px;
 }
-.artists-rows{display:flex;flex-direction:column;gap:36px}
+/* una sola línea en loop perfecto: 10 artistas + 10 copias idénticas, -50% exacto */
 .artists-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
-.artists-track{display:flex;gap:24px;width:max-content;animation:artists-scroll-a 45s linear infinite}
-.artists-marquee.reverse .artists-track{animation-name:artists-scroll-b;animation-duration:65s}
-@keyframes artists-scroll-a{to{transform:translateX(calc(-50% - 12px))}}
-@keyframes artists-scroll-b{from{transform:translateX(calc(-50% - 12px))}to{transform:translateX(0)}}
-.artist-slide{flex:0 0 clamp(220px,23vw,320px);border-top:1px solid var(--hair);padding-top:20px}
-.artist-slide img{width:100%;aspect-ratio:4/5;object-fit:cover;margin-bottom:18px;user-select:none;-webkit-user-drag:none}
-.artist-slide h3{font-family:var(--font-display);font-size:clamp(32px,3.2vw,52px);text-transform:uppercase;line-height:1}
+.artists-track{display:flex;width:max-content;animation:artists-scroll 60s linear infinite}
+@keyframes artists-scroll{to{transform:translateX(-50%)}}
+.artist-slide{flex:0 0 clamp(154px,16.1vw,224px);margin-right:24px;border-top:1px solid var(--hair);padding-top:20px}
+.artist-slide img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;margin-bottom:18px;user-select:none;-webkit-user-drag:none}
+.artist-slide h3{font-family:var(--font-display);font-size:clamp(22px,2.2vw,36px);text-transform:uppercase;line-height:1}
 .artist-slide .meta{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;color:var(--dim);margin-top:10px}
 
 /* ---------- with clients: logo marquee ---------- */
@@ -238,7 +236,7 @@ main>section.hero{background:transparent}
 @keyframes clients-scroll{to{transform:translateX(calc(-50% - 14px))}}
 @media (prefers-reduced-motion:reduce){.clients-track,.artists-track{animation:none}}
 @media (max-width:720px){
-  .artist-slide{flex-basis:62vw}
+  .artist-slide{flex-basis:43.4vw}
   .clients-track img{height:84px}
 }
 .quote-pending{
