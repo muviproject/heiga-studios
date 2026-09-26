@@ -110,8 +110,9 @@ main>section.hero{background:transparent}
   font-size:clamp(44px,7.2vw,120px);line-height:.95;max-width:1400px;
 }
 .manifesto .ch{display:inline-block;opacity:0;transform:translateY(.35em);will-change:transform,opacity}
-.zoom-figure{margin-top:80px;overflow:hidden}
-.zoom-figure img{width:100%;height:auto;transform:scale(1.2);will-change:transform}
+/* borde a borde: la figura rompe el contenedor .wrap y ocupa todo el viewport */
+.zoom-figure{margin:80px calc(50% - 50vw) 0;max-width:100vw;overflow:hidden;background:var(--light)}
+.zoom-figure img{width:100%;height:auto;transform:scale(1.2);will-change:transform;display:block}
 
 /* ---------- tilt card (-43deg -> 0deg) ---------- */
 .tilt-stage{padding:140px var(--pad);overflow:hidden}
