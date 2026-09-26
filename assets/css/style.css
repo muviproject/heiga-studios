@@ -219,7 +219,6 @@ main>section.hero{background:transparent}
 .artists-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
 .artists-track{display:flex;gap:24px;width:max-content;animation:artists-scroll-a 45s linear infinite}
 .artists-marquee.reverse .artists-track{animation-name:artists-scroll-b;animation-duration:65s}
-.artists-marquee:hover .artists-track{animation-play-state:paused}
 @keyframes artists-scroll-a{to{transform:translateX(calc(-50% - 12px))}}
 @keyframes artists-scroll-b{from{transform:translateX(calc(-50% - 12px))}to{transform:translateX(0)}}
 .artist-slide{flex:0 0 clamp(220px,23vw,320px);border-top:1px solid var(--hair);padding-top:20px}
@@ -236,7 +235,6 @@ main>section.hero{background:transparent}
 .clients-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .clients-track{display:flex;gap:28px;width:max-content;animation:clients-scroll 30s linear infinite}
 .clients-track img{flex:0 0 auto;height:110px;width:auto;aspect-ratio:16/10;object-fit:cover;border-radius:4px;user-select:none;-webkit-user-drag:none}
-.clients-marquee:hover .clients-track{animation-play-state:paused}
 @keyframes clients-scroll{to{transform:translateX(calc(-50% - 14px))}}
 @media (prefers-reduced-motion:reduce){.clients-track,.artists-track{animation:none}}
 @media (max-width:720px){
