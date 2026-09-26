@@ -108,13 +108,13 @@
   if (scrim) scrim.addEventListener('click', function(){ setDrawer(false); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') setDrawer(false); });
 
-  /* ---------- services hover: cross-fade images ---------- */
-  document.querySelectorAll('.svc').forEach(function(svc){
-    var bg = svc.querySelector('.svc-bg');
-    if(!bg) return;
-    svc.addEventListener('mouseenter', function(){ bg.style.opacity = '1'; });
-    svc.addEventListener('mouseleave', function(){ bg.style.opacity = '0'; });
-  });
+  /* ---------- services: scroll reveal + parallax (como AK.REC) ---------- */
+  var svcIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting){ en.target.classList.add('inview'); svcIO.unobserve(en.target); }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.svc').forEach(function(s){ svcIO.observe(s); });
 
   /* ---------- vinyls: viewport gate (+/-200px margin) ---------- */
   var vio = new IntersectionObserver(function(entries){
@@ -130,6 +130,7 @@
   var strip = document.querySelector('[data-drift]');
   var stripWrap = document.querySelector('.gallery');
   var sats = Array.prototype.slice.call(document.querySelectorAll('.sat'));
+  var svcBgs = Array.prototype.slice.call(document.querySelectorAll('.svc-bg'));
   var heroBg = document.querySelector('.hero-bg');
   var heroSec = document.querySelector('.hero');
 
@@ -191,6 +192,15 @@
         var depth = parseFloat(sat.getAttribute('data-depth') || '0.15');
         var off = (r.top + r.height/2 - vh/2) * depth;
         sat.style.transform = 'translateY(' + off.toFixed(1) + 'px)';
+      });
+    }
+    if (svcBgs.length){
+      /* parallax de las imágenes de servicios: se desplazan más lento que el scroll */
+      var vhS = window.innerHeight;
+      svcBgs.forEach(function(bg){
+        var r = bg.parentElement.getBoundingClientRect();
+        var off = (r.top + r.height/2 - vhS/2) * 0.1;
+        bg.style.transform = 'translateY(' + off.toFixed(1) + 'px)';
       });
     }
   }
