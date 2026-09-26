@@ -114,19 +114,16 @@ main>section.hero{background:transparent}
 .zoom-figure{margin:80px calc(50% - 50vw) 0;max-width:100vw;overflow:hidden;background:var(--light)}
 .zoom-figure img{width:100%;height:auto;transform:scale(1.2);will-change:transform;display:block}
 
-/* ---------- tilt card (-43deg -> 0deg) ---------- */
-.tilt-stage{padding:140px var(--pad);overflow:hidden}
-.tilt-card{
-  background:var(--bg-2);border-radius:28px;
-  max-width:1200px;margin:0 auto;padding:clamp(48px,8vw,120px);
-}
-/* las palabras aparecen en su lugar con fade ligado al scroll (sin rotación) */
-.tilt-card .w{will-change:opacity}
-.tilt-card p{
+/* ---------- manifiesto grande: tipografía al doble, directo sobre negro, sin tarjeta ---------- */
+.manifesto-block{background:#000;padding:140px var(--pad)}
+.manifesto-big{
   font-family:var(--font-display);text-transform:uppercase;
-  font-size:clamp(40px,6vw,104px);line-height:.95;
+  font-size:clamp(80px,12vw,208px);line-height:.92;
+  max-width:1600px;margin:0 auto;
 }
-.tilt-card .accent{color:var(--accent)}
+/* las palabras aparecen en su lugar con fade ligado al scroll */
+.manifesto-big .w{will-change:opacity}
+.manifesto-big .accent{color:var(--accent)}
 
 /* ---------- services ---------- */
 .services{background:#000}

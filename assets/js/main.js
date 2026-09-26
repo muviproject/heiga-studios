@@ -134,7 +134,7 @@
   var heroSec = document.querySelector('.hero');
 
   /* manifesto: split words (keeping .accent), fade in place tied to scroll */
-  var wordsP = document.querySelector('[data-words] p');
+  var wordsP = document.querySelector('[data-words]');
   var words = [];
   if (wordsP){
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
