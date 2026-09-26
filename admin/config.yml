@@ -1,0 +1,36 @@
+# Decap CMS config — Heiga Studios blog
+# Repo layout: site/ is the published root (static hosting serves site/).
+backend:
+  name: git-gateway
+  branch: main
+  # Alternative: github (requires OAuth app). git-gateway works with Netlify Identity.
+
+media_folder: "site/assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "site/content/blog"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}} — {{date}}"
+    fields:
+      - {label: "Título", name: "title", widget: "string", hint: "El titular del post. Aparece como <h1> y en el índice."}
+      - {label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD", hint: "Fecha de publicación."}
+      - {label: "Portada", name: "cover", widget: "image", hint: "Imagen principal del post (también se usa en redes sociales)."}
+      - {label: "Alt de la portada (SEO + accesibilidad)", name: "cover_alt", widget: "string", hint: "Describe la imagen en una frase. Obligatorio para SEO."}
+      - {label: "Resumen", name: "excerpt", widget: "text", required: false, hint: "2–3 líneas para el índice del blog y la home. Si se deja vacío, se usan las primeras palabras del cuerpo."}
+      - {label: "Autor", name: "author", widget: "string", default: "Heiga Studios", required: false}
+      - {label: "Tags", name: "tags", widget: "list", required: false, hint: "Ej: premios, prensa, eventos."}
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        collapsed: true
+        hint: "Vista previa del snippet de Google: título + URL + descripción."
+        fields:
+          - {label: "SEO title (50–60 caracteres)", name: "seo_title", widget: "string", required: false, hint: "Ideal: 50–60 caracteres. Si se deja vacío, se usa el título del post."}
+          - {label: "Meta description (120–155 caracteres)", name: "seo_description", widget: "text", required: false, hint: "Ideal: 120–155 caracteres. Si se deja vacía, se usa el resumen o el inicio del cuerpo."}
+          - {label: "Slug (URL)", name: "slug", widget: "string", required: false, hint: "Parte final de la URL: /blog/tu-slug/. Solo minúsculas y guiones. Si se deja vacío, se genera del título."}
+          - {label: "OG image (redes sociales)", name: "og_image", widget: "image", required: false, hint: "Ideal 1200×630. Si se deja vacía, se usa la portada."}
+      - {label: "Cuerpo", name: "body", widget: "markdown", hint: "El contenido del post. Mínimo recomendado: 300 palabras para SEO."}
